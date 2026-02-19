@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #F8F9FA;
+  --color-foreground: #1F2958;
+  --color-surface: #FFFFFF;
+  --color-surface-raised: #F1F3F5;
+  --color-border: #E2E5E9;
+  --color-border-subtle: #EDF0F2;
+  --color-accent: #12C1E6;
+  --color-accent-hover: #0FADD0;
+  --color-accent-active: #0D9AB8;
+  --color-accent-light: #0D9AB8;
+  --color-accent-muted: #E8F9FC;
+  --color-text-primary: #1F2958;
+  --color-text-secondary: #4D4D4D;
+  --color-text-tertiary: #9CA3AF;
+  --color-success: #3EBE72;
+  --color-warning: #C9A825;
+  --color-error: #DD6754;
+  --color-method-get: #2D9B5A;
+  --color-method-post: #7c3aed;
+  --color-json-string: #047857;
+  --color-json-number: #0369a1;
+  --color-json-boolean: #b45309;
+  --color-json-key: #6d28d9;
+  --font-sans: var(--font-poppins);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Light theme is the @theme default above. color-scheme tells the browser. */
+:root {
+  color-scheme: light;
+}
+
+/* Dark theme — overrides the CSS custom properties emitted by @theme */
+.dark {
+  color-scheme: dark;
+  --color-background: #0a0a0a;
+  --color-foreground: #e5e5e5;
+  --color-surface: #111113;
+  --color-surface-raised: #19191b;
+  --color-border: #27272a;
+  --color-border-subtle: #1e1e21;
+  --color-accent: #12C1E6;
+  --color-accent-hover: #0FADD0;
+  --color-accent-active: #0D9AB8;
+  --color-accent-light: #7dd3fc;
+  --color-accent-muted: #0c4a6e;
+  --color-text-primary: #e5e5e5;
+  --color-text-secondary: #a1a1aa;
+  --color-text-tertiary: #71717a;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-method-get: #15803d;
+  --color-method-post: #7c3aed;
+  --color-json-string: #34d399;
+  --color-json-number: #38bdf8;
+  --color-json-boolean: #fbbf24;
+  --color-json-key: #a78bfa;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-tertiary);
+}
+
+/* Focus ring for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Selection color */
+::selection {
+  background: var(--color-accent-muted);
+  color: var(--color-text-primary);
+}
