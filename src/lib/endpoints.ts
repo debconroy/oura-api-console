@@ -40,6 +40,12 @@ export const SCOPES: ScopeDef[] = [
     scope: "tag",
   },
   {
+    id: "spo2",
+    label: "SpO2",
+    description: "Read blood oxygen (SpO2) data",
+    scope: "spo2",
+  },
+  {
     id: "session",
     label: "Session",
     description: "Read guided/unguided session data",

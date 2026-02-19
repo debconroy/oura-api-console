@@ -123,7 +123,7 @@ export function buildAuthUrl(scopes: string[], state?: string): string {
     client_id: creds.clientId,
     redirect_uri: creds.redirectUri,
     response_type: "code",
-    scope: scopes.join("+"),
+    scope: scopes.join(" "),
   });
 
   if (state) {
