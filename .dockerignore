@@ -1,0 +1,8 @@
+node_modules
+.next
+.git
+.env*
+data/credentials.json
+data/tokens.json
+cdk.out
+*.md

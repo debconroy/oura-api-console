@@ -1,0 +1,74 @@
+name: Deploy CDK Stack
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-2
+  NODE_VERSION: '20'
+  # REQUIRED for Docker Lambda: Disable BuildKit provenance attestations.
+  # Without this, Docker produces a multi-arch manifest index that Lambda
+  # and ECR reject. Safe to set even for non-Docker deploys (no effect).
+  BUILDX_NO_DEFAULT_ATTESTATIONS: '1'
+
+permissions:
+  id-token: write
+  contents: read
+  packages: read
+
+jobs:
+  deploy:
+    name: Lint, Test & Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          registry-url: https://npm.pkg.github.com
+          scope: '@validic-labs'
+
+      - name: Install dependencies
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Lint CDK
+        run: npx tsc --noEmit -p tsconfig.cdk.json
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AI_LAB_ACCOUNT_ID }}:role/GitHubActionsDeployRole
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Test CDK
+        run: npx jest --config jest.config.cdk.js
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.AI_LAB_ACCOUNT_ID }}
+          CDK_DEFAULT_REGION: ${{ env.AWS_REGION }}
+
+      - name: CDK Synth
+        run: npx cdk synth
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.AI_LAB_ACCOUNT_ID }}
+          CDK_DEFAULT_REGION: ${{ env.AWS_REGION }}
+
+      - name: CDK Diff
+        run: npx cdk diff || true
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.AI_LAB_ACCOUNT_ID }}
+          CDK_DEFAULT_REGION: ${{ env.AWS_REGION }}
+
+      - name: CDK Deploy
+        run: npx cdk deploy --all --require-approval never
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.AI_LAB_ACCOUNT_ID }}
+          CDK_DEFAULT_REGION: ${{ env.AWS_REGION }}
